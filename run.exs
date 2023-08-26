@@ -3,7 +3,7 @@ defmodule MyDbg do
 
   def dbg(code, options, %Macro.Env{} = caller) do
     quote do
-      GenServer.call(unquote(__MODULE__), {:dbg, __ENV__}, :infinity)
+      GenServer.call(unquote(__MODULE__), {:dbg, __ENV__, true}, :infinity)
       unquote(Macro.dbg(code, options, caller))
     end
   end
@@ -18,7 +18,7 @@ defmodule MyDbg do
   end
 
   @impl GenServer
-  def handle_call({:dbg, %Macro.Env{}}, _from, state) do
+  def handle_call({:dbg, %Macro.Env{}, _}, _from, state) do
     {:reply, :ok, state}
   end
 end
